@@ -156,12 +156,13 @@
                             <h2 class="text-2xl font-bold text-[#4A6C8C]">Giai đoạn 2: Lộ trình Huấn luyện 4 Tuần</h2>
                             <p class="text-gray-700 mt-1">Chọn tuần và kỹ năng để xem kế hoạch chi tiết cho các buổi học 30 phút.</p>
                         </div>
-                        <div id="skill-filter" class="flex space-x-2 mt-4 md:mt-0">
+                        <div id="skill-filter" class="flex flex-wrap gap-2 mt-4 md:mt-0">
                              <button class="btn btn-secondary text-sm" data-skill="all">Tất cả</button>
                              <button class="btn btn-secondary text-sm" data-skill="Listening">Nghe</button>
                              <button class="btn btn-secondary text-sm" data-skill="Reading">Đọc</button>
                              <button class="btn btn-secondary text-sm" data-skill="Grammar">Ngữ pháp</button>
                              <button class="btn btn-secondary text-sm" data-skill="Vocabulary">Từ vựng</button>
+                             <button class="btn btn-secondary text-sm" data-skill="Strategy">Chiến lược</button>
                          </div>
                     </div>
 
@@ -302,25 +303,25 @@
             });
             
             const roadmapData = {
-                '1': [
-                    { skill: 'Grammar', title: 'Part 5: Thì & Thể', obj: 'Ôn tập các thì cơ bản (Hiện tại đơn/tiếp diễn, Quá khứ đơn, Tương lai đơn) và cấu trúc câu bị động.', practice: 'Luyện 20 câu Part 5 về thì và thể.' },
-                    { skill: 'Listening', title: 'Part 1: Chiến lược mô tả tranh', obj: 'Phân biệt hành động, trạng thái và vị trí của vật thể. Loại trừ các đáp án sai.', practice: 'Nghe và phân tích 10 tranh Part 1.' },
-                    { skill: 'Vocabulary', title: 'Từ vựng văn phòng', obj: 'Học 20 từ vựng cơ bản về môi trường công sở (equipment, document, meeting...).', practice: 'Sử dụng Quizlet để ghi nhớ từ mới.' },
+                '1': [ // Tuần 1: Luyện Kỹ Năng Nghe
+                    { skill: 'Listening', title: 'Part 1 & 2: Nền tảng Nghe', obj: 'Nắm vững kỹ thuật phân tích tranh (Part 1) và nhận diện các dạng câu hỏi, bẫy trong Hỏi-Đáp (Part 2).', practice: 'Luyện tập 15 câu Part 1 và 20 câu Part 2, chú ý các từ đồng âm và câu trả lời gián tiếp.' },
+                    { skill: 'Listening', title: 'Part 3: Kỹ năng nghe hội thoại', obj: 'Luyện kỹ năng nghe-hiểu ý chính, thông tin chi tiết và suy luận từ các đoạn hội thoại ngắn.', practice: 'Nghe và phân tích 5 đoạn hội thoại Part 3, ghi lại các từ khóa quan trọng.' },
+                    { skill: 'Listening', title: 'Part 4: Kỹ năng nghe bài nói', obj: 'Tập trung xác định mục đích, đối tượng và thông tin cụ thể trong các bài nói ngắn (thông báo, quảng cáo...).', practice: 'Nghe và trả lời câu hỏi cho 5 bài nói Part 4.' },
                 ],
-                '2': [
-                    { skill: 'Listening', title: 'Part 2: Câu hỏi WH- & Yes/No', obj: 'Nhận diện các loại câu hỏi và các dạng câu trả lời bẫy, câu trả lời gián tiếp.', practice: 'Luyện 20 câu Part 2, tập trung vào từ để hỏi.' },
-                    { skill: 'Reading', title: 'Part 7: Kỹ năng Skim & Scan', obj: 'Luyện đọc lướt để tìm ý chính và đọc quét để tìm thông tin chi tiết (tên, số, ngày tháng).', practice: 'Áp dụng kỹ năng với 2 đoạn văn đơn.' },
-                    { skill: 'Grammar', title: 'Part 5: Loại từ', obj: 'Phân biệt và sử dụng đúng Danh từ, Động từ, Tính từ, Trạng từ trong câu.', practice: 'Luyện 20 câu Part 5 về loại từ.' },
+                '2': [ // Tuần 2: Luyện Kỹ Năng Đọc
+                    { skill: 'Grammar', title: 'Part 5: Chuyên sâu Ngữ pháp & Từ vựng', obj: 'Ôn tập các chủ điểm ngữ pháp cốt lõi (loại từ, thì, mệnh đề quan hệ) và các từ vựng hay gặp.', practice: 'Hoàn thành 30 câu Part 5, phân tích lý do chọn đáp án.' },
+                    { skill: 'Reading', title: 'Part 6: Đọc hiểu Ngữ cảnh', obj: 'Rèn luyện kỹ năng chọn từ/câu phù hợp nhất để điền vào đoạn văn dựa trên ngữ cảnh và liên kết ý.', practice: 'Làm 3 bài Part 6 hoàn chỉnh, chú ý các từ nối.' },
+                    { skill: 'Reading', title: 'Part 7: Chiến lược Đọc hiểu', obj: 'Thực hành kỹ năng skim/scan và chiến lược xử lý các dạng câu hỏi cho đoạn đơn và đoạn kép.', practice: 'Giải quyết 3 đoạn đơn và 1 cụm đoạn kép Part 7 trong thời gian quy định.' },
                 ],
-                '3': [
-                    { skill: 'Listening', title: 'Part 3: Kỹ năng nghe hiểu hội thoại', obj: 'Xác định người nói, chủ đề và các chi tiết cụ thể được đề cập trong hội thoại.', practice: 'Nghe 5 đoạn hội thoại và trả lời câu hỏi.' },
-                    { skill: 'Reading', title: 'Part 6: Đọc hiểu ngữ cảnh', obj: 'Học cách chọn từ/câu phù hợp để điền vào đoạn văn dựa vào ngữ cảnh.', practice: 'Làm 2 bài Part 6 hoàn chỉnh.' },
-                    { skill: 'Vocabulary', title: 'Từ vựng về tài chính, mua sắm', obj: 'Học 20 từ vựng về các chủ đề thường gặp (invoice, budget, discount...).', practice: 'Đặt câu với các từ vựng mới.' },
+                '3': [ // Tuần 3: Luyện Đề & Quản lý thời gian
+                    { skill: 'Strategy', title: 'Luyện đề: Listening Section', obj: 'Làm một bài thi Listening hoàn chỉnh (100 câu) trong điều kiện thời gian thật (45 phút) để rèn luyện sự tập trung.', practice: 'Ghi lại các câu bị sai hoặc phân vân để phân tích.' },
+                    { skill: 'Strategy', title: 'Luyện đề: Reading Section', obj: 'Làm một bài thi Reading hoàn chỉnh (100 câu) trong điều kiện thời gian thật (75 phút) để kiểm tra tốc độ và chiến thuật.', practice: 'Tự đánh giá phần nào tốn nhiều thời gian nhất.' },
+                    { skill: 'Strategy', title: 'Phân tích lỗi sai & Tổng kết', obj: 'Xem lại toàn bộ bài thi thử, phân loại lỗi sai (ngữ pháp, từ vựng, nghe nhầm, đọc sai ý) và ghi vào sổ tay lỗi sai.', practice: 'Xác định 2-3 điểm yếu lớn nhất cần cải thiện.' },
                 ],
-                '4': [
-                    { skill: 'Reading', title: 'Part 7: Xử lý đoạn văn kép/ba', obj: 'Phát triển chiến lược liên kết thông tin giữa các đoạn văn để trả lời câu hỏi.', practice: 'Luyện tập với 1 bộ đoạn văn kép.' },
-                    { skill: 'Listening', title: 'Part 4: Nghe hiểu bài nói ngắn', obj: 'Nắm bắt mục đích chính, đối tượng nghe và các thông tin chi tiết của bài thông báo, quảng cáo...', practice: 'Nghe 5 bài nói ngắn và trả lời câu hỏi.' },
-                    { skill: 'Grammar', title: 'Tổng ôn tập & giải đề', obj: 'Hệ thống lại các điểm ngữ pháp quan trọng và áp dụng chiến lược làm bài tổng hợp.', practice: 'Giải một mini-test (Reading & Listening).' },
+                '4': [ // Tuần 4: Tự luyện theo Điểm yếu
+                    { skill: 'Listening', title: 'Tự luyện Nghe chuyên sâu', obj: 'Dựa vào kết quả tuần 3, tập trung luyện lại Part nghe yếu nhất. Ví dụ: chỉ nghe Part 3 nếu yếu phần này.', practice: 'Làm lại các câu sai của tuần trước và luyện thêm 20-30 câu mới cho Part yếu nhất.' },
+                    { skill: 'Reading', title: 'Tự luyện Đọc chuyên sâu', obj: 'Tập trung vào các dạng bài đọc hoặc chủ điểm ngữ pháp còn yếu. Củng cố từ vựng theo chủ đề.', practice: 'Luyện 20 câu Part 5 về ngữ pháp yếu, hoặc đọc thêm 3-4 đoạn Part 7 về chủ đề hay sai.' },
+                    { skill: 'Strategy', title: 'Tổng duyệt & Củng cố tâm lý', obj: 'Xem lại sổ tay lỗi sai, ghi nhớ các chiến lược quan trọng. Làm một mini-test cuối cùng để củng cố sự tự tin.', practice: 'Thư giãn, chuẩn bị tâm lý tốt nhất cho ngày thi.' },
                 ],
             };
 
@@ -382,3 +383,4 @@
     </script>
 </body>
 </html>
+

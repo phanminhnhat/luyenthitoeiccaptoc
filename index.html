@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kế hoạch Huấn luyện TOEIC Cấp tốc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: Tôi đã thiết kế ứng dụng này theo một luồng công việc logic, từ tổng quan đến chi tiết, giúp người quản lý dễ dàng nắm bắt và triển khai. Cấu trúc bao gồm 4 phần chính: Tổng quan, Đánh giá, Lộ trình, và Công cụ. Người dùng có thể điều hướng qua các tab. Phần Lộ trình là trọng tâm, với bộ lọc tương tác theo tuần và kỹ năng, cho phép lập kế hoạch linh hoạt và tập trung vào các điểm yếu cụ thể. Cấu trúc này tối ưu hóa trải nghiệm người dùng bằng cách chia nhỏ thông tin phức tạp thành các bước dễ quản lý, phù hợp với mục tiêu xây dựng một chương trình huấn luyện nhanh và hiệu quả. -->
+    <!-- Visualization & Content Choices: 1. Phân bổ điểm số hiện tại: Mục tiêu là thông báo tình hình. Sử dụng biểu đồ cột (Chart.js) để trực quan hóa sự phân bổ điểm số của nhân viên, giúp người quản lý thấy rõ điểm xuất phát. Tương tác khi di chuột để xem chi tiết. 2. Lộ trình huấn luyện: Mục tiêu là tổ chức kế hoạch. Sử dụng các thẻ (card) và bộ lọc (button) được điều khiển bằng JavaScript để tạo ra một lịch trình tương tác. Người dùng có thể chọn tuần và lọc các buổi học theo kỹ năng, giúp tập trung vào mục tiêu cụ thể. 3. Danh sách công cụ: Mục tiêu là cung cấp thông tin. Sử dụng layout thẻ (card) với Tailwind CSS để trình bày các tài nguyên một cách có tổ chức và hấp dẫn. Không cần tương tác phức tạp. Tất cả các lựa chọn này đều nhằm mục đích đơn giản hóa việc lập kế hoạch và tăng tính tương tác, không sử dụng SVG hay Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #333;
+        }
+        .nav-link {
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active {
+            color: #4A6C8C;
+            border-bottom-color: #4A6C8C;
+        }
+        .section-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            transition: all 0.3s;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #4A6C8C;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #3E5A74;
+        }
+        .btn-secondary {
+            background-color: #E0E7EF;
+            color: #4A6C8C;
+        }
+        .btn-secondary.active {
+            background-color: #4A6C8C;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #C8D3E0;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-[#4A6C8C]">Kế hoạch Huấn luyện TOEIC Cấp tốc</h1>
+            <p class="text-lg text-gray-600 mt-2">Chương trình cải thiện kỹ năng trọng yếu trong 4 tuần</p>
+        </header>
+
+        <nav class="flex justify-center border-b mb-8">
+            <a href="#overview" class="nav-link active px-6 py-3 text-lg" data-target="overview">Tổng quan</a>
+            <a href="#assessment" class="nav-link px-6 py-3 text-lg" data-target="assessment">Giai đoạn 1: Đánh giá</a>
+            <a href="#roadmap" class="nav-link px-6 py-3 text-lg" data-target="roadmap">Giai đoạn 2: Lộ trình</a>
+            <a href="#tools" class="nav-link px-6 py-3 text-lg" data-target="tools">Công cụ & Tài nguyên</a>
+        </nav>
+
+        <main>
+            <section id="overview" class="content-section">
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold text-[#4A6C8C] mb-4">Tổng quan Chương trình</h2>
+                    <p class="text-gray-700 mb-6">Chương trình được thiết kế để giải quyết thách thức hiện tại của đội ngũ: điểm số TOEIC còn hạn chế (400-650). Mục tiêu là nâng cao điểm số một cách hiệu quả trong thời gian ngắn thông qua các buổi huấn luyện ngắn, tập trung vào kỹ năng yếu và kết hợp tự luyện tập. Lộ trình này sẽ cung cấp một cấu trúc rõ ràng để đạt được mục tiêu đó.</p>
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Tình hình Hiện tại</h3>
+                            <p class="text-gray-600 mb-4">Phân bổ điểm số của nhân viên cho thấy phần lớn đang ở mức cơ bản và trung cấp. Biểu đồ này minh họa điểm xuất phát của chúng ta, từ đó xác định các nhóm cần ưu tiên hỗ trợ.</p>
+                             <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-center"><span class="w-3 h-3 bg-[#E8A87C] rounded-full mr-3"></span><strong>400-450 điểm:</strong> Nền tảng yếu, cần củng cố ngữ pháp và từ vựng cơ bản.</li>
+                                <li class="flex items-center"><span class="w-3 h-3 bg-[#5F9EA0] rounded-full mr-3"></span><strong>451-550 điểm:</strong> Có kiến thức cơ bản nhưng kỹ năng làm bài và tốc độ còn hạn chế.</li>
+                                <li class="flex items-center"><span class="w-3 h-3 bg-[#4A6C8C] rounded-full mr-3"></span><strong>551-650 điểm:</strong> Kỹ năng khá, cần tập trung vào các câu hỏi bẫy và tối ưu hóa chiến lược.</li>
+                            </ul>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="scoreDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="assessment" class="content-section hidden">
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold text-[#4A6C8C] mb-4">Giai đoạn 1: Đánh giá Năng lực</h2>
+                    <p class="text-gray-700 mb-6">Bước đầu tiên và quan trọng nhất là xác định chính xác điểm mạnh, điểm yếu của từng cá nhân. Một bài kiểm tra đầu vào chất lượng sẽ cung cấp dữ liệu cần thiết để cá nhân hóa lộ trình học, đảm bảo thời gian huấn luyện được sử dụng hiệu quả nhất.</p>
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">1. Công cụ Đánh giá</h3>
+                             <p class="text-gray-600">Sử dụng một bài thi thử TOEIC đầy đủ (Full Test) có cấu trúc và độ khó tương đương bài thi thật. Các lựa chọn đề xuất:</p>
+                            <ul class="list-disc list-inside text-gray-700 mt-2 pl-4 space-y-1">
+                                <li>Bộ đề <span class="font-semibold">ETS TOEIC Test</span> (đề chính thức từ đơn vị tổ chức thi).</li>
+                                <li>Các nền tảng thi thử trực tuyến uy tín như <span class="font-semibold">Yola, IIG Vietnam</span>.</li>
+                                <li>Sách <span class="font-semibold">"Economy TOEIC"</span> hoặc <span class="font-semibold">"Hacker TOEIC"</span>.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">2. Phân tích Kết quả & Xác định Điểm yếu</h3>
+                            <p class="text-gray-600">Sau khi có kết quả, hãy phân tích chi tiết theo từng phần để tìm ra các "lỗ hổng" kiến thức và kỹ năng. Dưới đây là các điểm yếu thường gặp tương ứng với từng phần thi:</p>
+                             <div class="mt-4 grid md:grid-cols-2 gap-6">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2">Listening Comprehension</h4>
+                                    <ul class="space-y-2 text-sm">
+                                        <li><strong>Part 1 (Mô tả tranh):</strong> Yếu từ vựng về đồ vật, hành động; nhầm lẫn giữa các từ phát âm gần giống.</li>
+                                        <li><strong>Part 2 (Hỏi - Đáp):</strong> Không nắm bắt được từ khóa (WH-words); bị bẫy bởi các câu trả lời gián tiếp.</li>
+                                        <li><strong>Part 3 (Hội thoại ngắn):</strong> Không theo kịp tốc độ nói; bỏ lỡ thông tin chi tiết; suy luận ý chính kém.</li>
+                                        <li><strong>Part 4 (Bài nói ngắn):</strong> Mất tập trung; không xác định được mục đích chính của bài nói.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2">Reading Comprehension</h4>
+                                    <ul class="space-y-2 text-sm">
+                                        <li><strong>Part 5 (Hoàn thành câu):</strong> Mất gốc ngữ pháp (thì, thể, loại từ); thiếu từ vựng.</li>
+                                        <li><strong>Part 6 (Hoàn thành đoạn văn):</strong> Kỹ năng đọc ngữ cảnh yếu; không liên kết được ý giữa các câu.</li>
+                                        <li><strong>Part 7 (Đọc hiểu):</strong> Quản lý thời gian kém; kỹ năng scan/skim thông tin chậm; từ vựng chuyên ngành hạn chế.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="roadmap" class="content-section hidden">
+                <div class="section-card">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                         <div>
+                            <h2 class="text-2xl font-bold text-[#4A6C8C]">Giai đoạn 2: Lộ trình Huấn luyện 4 Tuần</h2>
+                            <p class="text-gray-700 mt-1">Chọn tuần và kỹ năng để xem kế hoạch chi tiết cho các buổi học 30 phút.</p>
+                        </div>
+                        <div id="skill-filter" class="flex space-x-2 mt-4 md:mt-0">
+                             <button class="btn btn-secondary text-sm" data-skill="all">Tất cả</button>
+                             <button class="btn btn-secondary text-sm" data-skill="Listening">Nghe</button>
+                             <button class="btn btn-secondary text-sm" data-skill="Reading">Đọc</button>
+                             <button class="btn btn-secondary text-sm" data-skill="Grammar">Ngữ pháp</button>
+                             <button class="btn btn-secondary text-sm" data-skill="Vocabulary">Từ vựng</button>
+                         </div>
+                    </div>
+
+                    <div class="mb-6 flex justify-center space-x-2 md:space-x-4 bg-gray-100 p-2 rounded-lg">
+                         <button class="week-tab btn btn-primary flex-1" data-week="1">Tuần 1</button>
+                         <button class="week-tab btn btn-secondary flex-1" data-week="2">Tuần 2</button>
+                         <button class="week-tab btn btn-secondary flex-1" data-week="3">Tuần 3</button>
+                         <button class="week-tab btn btn-secondary flex-1" data-week="4">Tuần 4</button>
+                    </div>
+
+                    <div id="roadmap-content" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+                </div>
+            </section>
+            
+            <section id="tools" class="content-section hidden">
+                 <div class="section-card">
+                    <h2 class="text-2xl font-bold text-[#4A6C8C] mb-4">Công cụ & Tài nguyên Đề xuất</h2>
+                    <p class="text-gray-700 mb-6">Đây là danh sách các công cụ và tài nguyên được tuyển chọn để hỗ trợ nhân viên trong quá trình tự học và luyện tập thêm ngoài giờ huấn luyện. Việc kết hợp các công cụ này sẽ giúp tối đa hóa hiệu quả học tập.</p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                             <h3 class="font-bold text-lg mb-2">💻 Nền tảng Thi thử</h3>
+                             <p class="text-sm text-gray-600">Mô phỏng kỳ thi thật, giúp làm quen với áp lực thời gian và cấu trúc đề.</p>
+                             <ul class="mt-3 space-y-2 text-sm">
+                                 <li><strong>ETS TOEIC:</strong> Bộ đề chính thức, độ khó sát nhất.</li>
+                                 <li><strong>Hacker TOEIC:</strong> Bộ đề có độ khó cao hơn, thử thách tốt.</li>
+                                 <li><strong>TOEIC Test Pro:</strong> Nền tảng online với nhiều bài thi thử.</li>
+                             </ul>
+                        </div>
+                         <div class="bg-gray-50 p-6 rounded-lg">
+                             <h3 class="font-bold text-lg mb-2">📱 Ứng dụng Tự học</h3>
+                             <p class="text-sm text-gray-600">Linh hoạt học mọi lúc mọi nơi, củng cố từ vựng và ngữ pháp hiệu quả.</p>
+                              <ul class="mt-3 space-y-2 text-sm">
+                                 <li><strong>Quizlet / Anki:</strong> Tạo flashcard để học 600 từ vựng TOEIC.</li>
+                                 <li><strong>Duolingo:</strong> Ôn lại ngữ pháp và từ vựng cơ bản.</li>
+                                 <li><strong>Memrise:</strong> Học từ vựng qua các video của người bản xứ.</li>
+                             </ul>
+                        </div>
+                         <div class="bg-gray-50 p-6 rounded-lg">
+                             <h3 class="font-bold text-lg mb-2">📚 Tài liệu Ngữ pháp & Từ vựng</h3>
+                             <p class="text-sm text-gray-600">Nguồn tài liệu hệ thống hóa kiến thức trọng tâm cần cho kỳ thi.</p>
+                             <ul class="mt-3 space-y-2 text-sm">
+                                 <li><strong>Sách "600 Essential Words for the TOEIC":</strong> Từ vựng thiết yếu.</li>
+                                 <li><strong>Sách "Grammar in Use" (Raymond Murphy):</strong> Củng cố ngữ pháp.</li>
+                                 <li><strong>Website "English Grammar":</strong> Tra cứu các chủ điểm ngữ pháp.</li>
+                             </ul>
+                        </div>
+                         <div class="bg-gray-50 p-6 rounded-lg">
+                             <h3 class="font-bold text-lg mb-2">🎧 Kênh Luyện nghe</h3>
+                             <p class="text-sm text-gray-600">Tăng cường khả năng "tắm" ngôn ngữ và làm quen với nhiều giọng điệu.</p>
+                             <ul class="mt-3 space-y-2 text-sm">
+                                 <li><strong>TED Talks / TED-Ed:</strong> Nghe các bài nói chuyện ngắn với phụ đề.</li>
+                                 <li><strong>BBC Learning English:</strong> Các bản tin và bài học ngắn.</li>
+                                 <li><strong>TOEIC Listening Practice (YouTube):</strong> Các kênh chuyên luyện nghe TOEIC.</li>
+                             </ul>
+                        </div>
+                    </div>
+                 </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
+
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const scoreCtx = document.getElementById('scoreDistributionChart').getContext('2d');
+            new Chart(scoreCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['400-450', '451-550', '551-650'],
+                    datasets: [{
+                        label: 'Số lượng nhân viên',
+                        data: [12, 18, 15],
+                        backgroundColor: [
+                            'rgba(232, 168, 124, 0.7)',
+                            'rgba(95, 158, 160, 0.7)',
+                            'rgba(74, 108, 140, 0.7)'
+                        ],
+                        borderColor: [
+                            '#E8A87C',
+                            '#5F9EA0',
+                            '#4A6C8C'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Số lượng: ${context.raw} nhân viên`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Số lượng nhân viên'
+                            }
+                        },
+                        x: {
+                             title: {
+                                display: true,
+                                text: 'Phổ điểm'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const roadmapData = {
+                '1': [
+                    { skill: 'Grammar', title: 'Part 5: Thì & Thể', obj: 'Ôn tập các thì cơ bản (Hiện tại đơn/tiếp diễn, Quá khứ đơn, Tương lai đơn) và cấu trúc câu bị động.', practice: 'Luyện 20 câu Part 5 về thì và thể.' },
+                    { skill: 'Listening', title: 'Part 1: Chiến lược mô tả tranh', obj: 'Phân biệt hành động, trạng thái và vị trí của vật thể. Loại trừ các đáp án sai.', practice: 'Nghe và phân tích 10 tranh Part 1.' },
+                    { skill: 'Vocabulary', title: 'Từ vựng văn phòng', obj: 'Học 20 từ vựng cơ bản về môi trường công sở (equipment, document, meeting...).', practice: 'Sử dụng Quizlet để ghi nhớ từ mới.' },
+                ],
+                '2': [
+                    { skill: 'Listening', title: 'Part 2: Câu hỏi WH- & Yes/No', obj: 'Nhận diện các loại câu hỏi và các dạng câu trả lời bẫy, câu trả lời gián tiếp.', practice: 'Luyện 20 câu Part 2, tập trung vào từ để hỏi.' },
+                    { skill: 'Reading', title: 'Part 7: Kỹ năng Skim & Scan', obj: 'Luyện đọc lướt để tìm ý chính và đọc quét để tìm thông tin chi tiết (tên, số, ngày tháng).', practice: 'Áp dụng kỹ năng với 2 đoạn văn đơn.' },
+                    { skill: 'Grammar', title: 'Part 5: Loại từ', obj: 'Phân biệt và sử dụng đúng Danh từ, Động từ, Tính từ, Trạng từ trong câu.', practice: 'Luyện 20 câu Part 5 về loại từ.' },
+                ],
+                '3': [
+                    { skill: 'Listening', title: 'Part 3: Kỹ năng nghe hiểu hội thoại', obj: 'Xác định người nói, chủ đề và các chi tiết cụ thể được đề cập trong hội thoại.', practice: 'Nghe 5 đoạn hội thoại và trả lời câu hỏi.' },
+                    { skill: 'Reading', title: 'Part 6: Đọc hiểu ngữ cảnh', obj: 'Học cách chọn từ/câu phù hợp để điền vào đoạn văn dựa vào ngữ cảnh.', practice: 'Làm 2 bài Part 6 hoàn chỉnh.' },
+                    { skill: 'Vocabulary', title: 'Từ vựng về tài chính, mua sắm', obj: 'Học 20 từ vựng về các chủ đề thường gặp (invoice, budget, discount...).', practice: 'Đặt câu với các từ vựng mới.' },
+                ],
+                '4': [
+                    { skill: 'Reading', title: 'Part 7: Xử lý đoạn văn kép/ba', obj: 'Phát triển chiến lược liên kết thông tin giữa các đoạn văn để trả lời câu hỏi.', practice: 'Luyện tập với 1 bộ đoạn văn kép.' },
+                    { skill: 'Listening', title: 'Part 4: Nghe hiểu bài nói ngắn', obj: 'Nắm bắt mục đích chính, đối tượng nghe và các thông tin chi tiết của bài thông báo, quảng cáo...', practice: 'Nghe 5 bài nói ngắn và trả lời câu hỏi.' },
+                    { skill: 'Grammar', title: 'Tổng ôn tập & giải đề', obj: 'Hệ thống lại các điểm ngữ pháp quan trọng và áp dụng chiến lược làm bài tổng hợp.', practice: 'Giải một mini-test (Reading & Listening).' },
+                ],
+            };
+
+            const roadmapContainer = document.getElementById('roadmap-content');
+            const weekTabs = document.querySelectorAll('.week-tab');
+            const skillFilters = document.querySelectorAll('#skill-filter button');
+            let currentWeek = '1';
+            let currentSkill = 'all';
+
+            function renderRoadmap() {
+                roadmapContainer.innerHTML = '';
+                const weekData = roadmapData[currentWeek] || [];
+                const filteredData = currentSkill === 'all' ? weekData : weekData.filter(item => item.skill === currentSkill);
+
+                if (filteredData.length === 0) {
+                    roadmapContainer.innerHTML = `<p class="text-gray-500 col-span-full text-center">Không có buổi học nào phù hợp với bộ lọc này.</p>`;
+                    return;
+                }
+                
+                filteredData.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'session-card border border-gray-200 p-4 rounded-lg bg-white hover:shadow-md transition-shadow';
+                    card.setAttribute('data-skill', item.skill);
+                    card.innerHTML = `
+                        <span class="inline-block bg-[#E0E7EF] text-[#4A6C8C] text-xs font-semibold px-2 py-1 rounded-full mb-2">${item.skill}</span>
+                        <h4 class="font-bold text-md text-gray-800">${item.title}</h4>
+                        <p class="text-sm text-gray-600 mt-1"><span class="font-semibold">Mục tiêu:</span> ${item.obj}</p>
+                        <p class="text-sm text-gray-600 mt-2"><span class="font-semibold">Tự luyện:</span> ${item.practice}</p>
+                    `;
+                    roadmapContainer.appendChild(card);
+                });
+            }
+            
+            weekTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    weekTabs.forEach(t => {
+                        t.classList.remove('btn-primary');
+                        t.classList.add('btn-secondary');
+                    });
+                    tab.classList.add('btn-primary');
+                    tab.classList.remove('btn-secondary');
+                    currentWeek = tab.dataset.week;
+                    renderRoadmap();
+                });
+            });
+
+            skillFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                     skillFilters.forEach(f => f.classList.remove('active'));
+                     filter.classList.add('active');
+                     currentSkill = filter.dataset.skill;
+                     renderRoadmap();
+                });
+            });
+            
+            document.querySelector('#skill-filter button[data-skill="all"]').classList.add('active');
+            renderRoadmap();
+        });
+    </script>
+</body>
+</html>
